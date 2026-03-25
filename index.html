@@ -1,9 +1,65 @@
-
-
 <!doctype html>
 <html lang="tr">
 <head>
-	<meta charset="utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0">
+    <title>Zamanla Değişen Ürünler - Eşleştirme</title>
+    
+    <script src="lib/common/phaser.min.js?v=1759311610" defer type="module"></script>
+    <script src="src/data.js" defer></script>
+    <script>
+        'use strict';
+        var assetsURLs = {"specificFonts":"assets/fonts/specific/","commonFonts":"assets/fonts/common/","specificAudio":"assets/audio/specific/","commonAudio":"assets/audio/common/","specificHTML":"assets/html/specific/","commonHTML":"assets/html/common/","specificImg":"assets/img/specific/","commonImg":"assets/img/common/","specificJs":"lib/specific/","commonJs":"lib/common/","specificJsObfuscated":"src/specific/","commonJsObfuscated":"src/common/"};
+    </script>
+
+    <style>
+        #remote-app { position: fixed; inset: 0; width: 100vw; height: 100vh; display: none; z-index: 100; }
+        #remote-iframe { width: 100%; height: 100%; border: none; background: #ffffff; }
+        #local-app { display: none; width: 100%; }
+        body.remote-mode { margin: 0; padding: 0; overflow: hidden; background: #000; }
+        #source-badge {
+            position: fixed; top: 10px; right: 10px; padding: 4px 10px;
+            background: rgba(0,0,0,0.6); color: #fff; font-family: sans-serif;
+            font-size: 11px; border-radius: 4px; z-index: 9999; display: none;
+        }
+    </style>
+
+    <script>
+        const NETLIFY_URL = "https://zamanladegisenurunler.netlify.app/";
+        const VERCEL_URL  = "https://zamanladegisenurunler.vercel.app/";
+        async function canReach(url) {
+            try { await fetch(url, { mode: 'no-cors', cache: 'no-cache' }); return true; } 
+            catch (e) { return false; }
+        }
+        function applyMode(mode, url = '') {
+            const r = document.getElementById('remote-app'), l = document.getElementById('local-app'), 
+                  i = document.getElementById('remote-iframe'), b = document.getElementById('source-badge');
+            if (mode !== 'local') {
+                i.src = url; r.style.display = 'block'; l.style.display = 'none';
+                document.body.classList.add('remote-mode');
+                b.textContent = (mode === 'netlify') ? 'DNS1' : 'DNS2';
+            } else {
+                r.style.display = 'none'; l.style.display = 'block'; b.textContent = 'CLOUD';
+            }
+            b.style.display = 'block';
+        }
+        async function decideSource() {
+            if (await canReach(NETLIFY_URL)) { applyMode('netlify', NETLIFY_URL); return; }
+            if (await canReach(VERCEL_URL)) { applyMode('vercel', VERCEL_URL); return; }
+            applyMode('local');
+        }
+        document.addEventListener('DOMContentLoaded', decideSource);
+    </script>
+</head>
+<body>
+
+    <div id="source-badge">KONTROL...</div>
+    <div id="remote-app"><iframe id="remote-iframe" src=""></iframe></div>
+
+    <div id="local-app">
+
+        	<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0">
 <title>Zamanla Değişen Ürünler - Eşleştirme</title>
@@ -971,4 +1027,10 @@
     </a>
 </div><div id="bk" class="bk"></div>
 <div id="gCntr"></div>
-</body></html>
+        
+
+
+        </div>
+
+</body>
+</html>
